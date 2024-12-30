@@ -12,64 +12,97 @@ class GroceryList extends StatefulWidget {
 }
 
 class _GroceryListState extends State<GroceryList> {
-  List<GroceryItem> _groceryItems = [];
+  final List<GroceryItem> _groceryItems = [];
+  late Future<List<GroceryItem>> _loadedItems;
+  String? _error;
 
   @override
   void initState() {
     super.initState();
-    _loadItems();
+    _loadedItems = _loadItems();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Your Groceries'),
-        actions: [IconButton(onPressed: _addItem, icon: const Icon(Icons.add))],
-      ),
-      body: _body,
-    );
+        appBar: AppBar(
+          title: const Text('Your Groceries'),
+          actions: [
+            IconButton(onPressed: _addItem, icon: const Icon(Icons.add))
+          ],
+        ),
+        body: FutureBuilder(future: _loadedItems, builder: _buildListBody));
   }
 
-  bool get _hasGroceryItems {
-    return _groceryItems.isNotEmpty;
+  Widget _buildListBody(context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return _loadingWidget;
+    }
+    if (snapshot.hasError) {
+      return _getloadingError(errorText: snapshot.error.toString());
+    }
+    if (snapshot.data!.isEmpty) {
+      return _fallbackContent;
+    }
+    return _groceryListContent(snapshot.data!);
   }
 
-  void _loadItems() async {
+  Future<List<GroceryItem>> _loadItems() async {
     final fetchedItems = await GroceryItemServices.getGroceryItems();
-    setState(() {
-      _groceryItems = fetchedItems;
-    });
+
+    if (fetchedItems.items != null) {
+      return fetchedItems.items!;
+    }
+    return [];
   }
 
   void _addItem() async {
-    await Navigator.of(context).push<GroceryItem>(
+    final newItem = await Navigator.of(context).push<GroceryItem>(
         MaterialPageRoute(builder: (ctx) => const NewItemWidget()));
-    _loadItems();
+
+    if (newItem == null) {
+      return;
+    }
+    setState(() {
+      _groceryItems.add(newItem);
+    });
   }
 
-  void _removeItem(GroceryItem item) {
+  void _removeItem(GroceryItem item) async {
+    final index = _groceryItems.indexOf(item);
     setState(() {
       _groceryItems.remove(item);
     });
+
+    if (!await GroceryItemServices.removeGroceryItem(item)) {
+      setState(() {
+        _groceryItems.insert(index, item);
+      });
+    }
   }
 
   Widget get _fallbackContent {
     return const Center(child: Text('No items added yet.'));
   }
 
-  Widget get _groceryListContent {
+  Widget _groceryListContent(List<GroceryItem> groceryItems) {
     return ListView.builder(
-      itemCount: _groceryItems.length,
+      itemCount: groceryItems.length,
       itemBuilder: (ctx, index) => Dismissible(
           background: Container(color: Colors.red),
-          onDismissed: (direction) => _removeItem(_groceryItems[index]),
-          key: ValueKey(_groceryItems[index].id),
-          child: ListItemTileWidget(groceryItem: _groceryItems[index])),
+          onDismissed: (direction) => _removeItem(groceryItems[index]),
+          key: ValueKey(groceryItems[index].id),
+          child: ListItemTileWidget(groceryItem: groceryItems[index])),
     );
   }
 
-  Widget get _body {
-    return _hasGroceryItems ? _groceryListContent : _fallbackContent;
+  Widget get _loadingWidget {
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
+  Widget _getloadingError({required String errorText}) {
+    return Center(child: Text(_error!));
   }
 }

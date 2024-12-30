@@ -24,6 +24,8 @@ class _NewItemState extends State<NewItemWidget> {
   var _enteredQuantity = 1;
   var _selectedCategory = categories[Categories.vegetables]!;
 
+  var _isSending = false;
+
   String get initialQuantity {
     return _enteredQuantity.toString();
   }
@@ -31,6 +33,9 @@ class _NewItemState extends State<NewItemWidget> {
   void _saveitem() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
+      _showSendingState(active: true);
+
+      _isSending = true;
 
       final item = GroceryItem(
           id: DateTime.now().toString(),
@@ -38,13 +43,23 @@ class _NewItemState extends State<NewItemWidget> {
           quantity: _enteredQuantity,
           category: _selectedCategory);
 
-      await GroceryItemServices.postGroceryItem(item);
+      final savedId = await GroceryItemServices.postGroceryItem(item);
       if (!context.mounted) {
         return;
       }
       // ignore: use_build_context_synchronously
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(GroceryItem(
+          id: savedId,
+          name: _enteredName,
+          quantity: _enteredQuantity,
+          category: _selectedCategory));
     }
+  }
+
+  void _showSendingState({required bool active}) {
+    setState(() {
+      _isSending = active;
+    });
   }
 
   void _resetForm() {
@@ -145,9 +160,17 @@ class _NewItemState extends State<NewItemWidget> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       TextButton(
-                          onPressed: _resetForm, child: const Text('Reset')),
+                          onPressed: _isSending ? null : _resetForm,
+                          child: const Text('Reset')),
                       ElevatedButton(
-                          onPressed: _saveitem, child: const Text('Add Item'))
+                          onPressed: _isSending ? null : _saveitem,
+                          child: _isSending
+                              ? const SizedBox(
+                                  height: 16,
+                                  width: 16,
+                                  child: CircularProgressIndicator(),
+                                )
+                              : const Text('Add Item'))
                     ],
                   )
                 ],
