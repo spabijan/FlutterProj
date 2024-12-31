@@ -17,8 +17,41 @@ class PlacesDetail extends StatelessWidget {
             Image.file(place.image,
                 fit: BoxFit.cover,
                 width: double.infinity,
-                height: double.infinity)
+                height: double.infinity),
+            Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Column(
+                  children: [
+                    CircleAvatar(
+                        radius: 70,
+                        backgroundImage: NetworkImage(_getMapSnapshotUrl)),
+                    Container(
+                      alignment: Alignment.center,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              colors: [Colors.transparent, Colors.black54],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter)),
+                      child: Text(
+                        place.location.address,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            color: Theme.of(context).colorScheme.onSurface),
+                      ),
+                    )
+                  ],
+                ))
           ],
         ));
+  }
+
+  String get _getMapSnapshotUrl {
+    final lat = place.location.latitude;
+    final lon = place.location.longitude;
+    return "https://maps.googleapis.com/maps/api/staticmap?center=$lat,$lon&zoom=16&size=600x300&maptype=roadmap&markers=color:Red%7Clabel:A%7C$lat,$lon&key=AIzaSyAhj6xW5RjUyVClERC5Ikf13JUTyVSCNTw";
   }
 }
