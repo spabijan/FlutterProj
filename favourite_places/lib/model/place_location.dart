@@ -1,7 +1,5 @@
-import 'package:favourite_places/model/place.dart';
-
 class PlaceLocation {
-  PlaceLocation(
+  const PlaceLocation(
       {required this.latitude, required this.longitude, required this.address});
 
   final double latitude;
