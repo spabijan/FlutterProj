@@ -15,6 +15,7 @@
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		9A471A26A216CB7BDBC33AF8 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED7A22E727F951C7C4F17FC5 /* Pods_Runner.framework */; };
+		B044E0C62D3EEA5F007EEC28 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B044E0C52D3EEA5F007EEC28 /* StoreKit.framework */; };
 		B5A9641417A1A8B6F7AE8D87 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D949C27B8D2D2AAA47B5C4B3 /* Pods_RunnerTests.framework */; };
 		F575EBC9A9A61083EB8784B5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AEDBE41813E3FF95E00421CC /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
@@ -63,6 +64,7 @@
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AEDBE41813E3FF95E00421CC /* GoogleService-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Runner/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B044E0C52D3EEA5F007EEC28 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		BBD9214E5B90CA84F395AB5B /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 		D949C27B8D2D2AAA47B5C4B3 /* Pods_RunnerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunnerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECC0E595B3F565BC19E36C45 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9A471A26A216CB7BDBC33AF8 /* Pods_Runner.framework in Frameworks */,
+				B044E0C62D3EEA5F007EEC28 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,7 +102,6 @@
 				5651A2BAF562886C6456525E /* Pods-RunnerTests.release.xcconfig */,
 				818998A615D9755056A215F9 /* Pods-RunnerTests.profile.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -114,6 +116,7 @@
 		77C888465E615563C892C54E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B044E0C52D3EEA5F007EEC28 /* StoreKit.framework */,
 				ED7A22E727F951C7C4F17FC5 /* Pods_Runner.framework */,
 				D949C27B8D2D2AAA47B5C4B3 /* Pods_RunnerTests.framework */,
 			);
@@ -475,7 +478,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = RE4RREW785;
+				DEVELOPMENT_TEAM = H6ABX93Q3V;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -658,7 +661,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = RE4RREW785;
+				DEVELOPMENT_TEAM = H6ABX93Q3V;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -681,7 +684,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = RE4RREW785;
+				DEVELOPMENT_TEAM = H6ABX93Q3V;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
