@@ -14,11 +14,15 @@ class Place {
 
   factory Place.fromJson(Map<String, dynamic> json) {
     final location = json['geometry']['location'];
+    Iterable photos = json['photos'];
+
     return Place(
         latitude: location['lat'],
-        longitude: location['lon'],
+        longitude: location['lng'],
         placeId: json['place_id'],
         name: json['name'],
-        photoUrl: json['photos'][0]['photo_reference']);
+        photoUrl: photos.isEmpty
+            ? "images/place_holder.png"
+            : photos.first['photo_reference']);
   }
 }

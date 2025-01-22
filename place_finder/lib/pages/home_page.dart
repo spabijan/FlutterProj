@@ -3,8 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:map_launcher/map_launcher.dart';
 import 'package:place_finder/view_models/place_list_vm.dart';
+import 'package:place_finder/view_models/place_vm.dart';
+import 'package:place_finder/widget/place_list.dart';
 import 'package:provider/provider.dart';
+import 'package:map_launcher/map_launcher.dart' as launcher;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -70,6 +74,22 @@ class _HomePageState extends State<HomePage> {
         zoom: 14)));
   }
 
+  void _openMapsFor(PlaceVM vm) async {
+    final availableMaps = await launcher.MapLauncher.installedMaps;
+    await availableMaps.first
+        .showMarker(coords: Coords(vm.latitude, vm.longitude), title: vm.name);
+  }
+
+  Set<Marker> _getPlaceMarkers(List<PlaceVM> places) {
+    return places.map((place) {
+      return Marker(
+          markerId: MarkerId(place.placeId),
+          icon: BitmapDescriptor.defaultMarker,
+          infoWindow: InfoWindow(title: place.name),
+          position: LatLng(place.latitude, place.longitude));
+    }).toSet();
+  }
+
   @override
   Widget build(BuildContext context) {
     final vm = context.watch<PlaceListVM>();
@@ -77,6 +97,8 @@ class _HomePageState extends State<HomePage> {
         body: Stack(
       children: [
         GoogleMap(
+            mapType: vm.mapType,
+            markers: _getPlaceMarkers(vm.places),
             myLocationButtonEnabled: true,
             onMapCreated: _onMapCreated,
             initialCameraPosition: CameraPosition(
@@ -92,7 +114,38 @@ class _HomePageState extends State<HomePage> {
                 fillColor: Colors.white,
                 filled: true),
           ),
-        )
+        ),
+        Visibility(
+          visible: vm.places.isNotEmpty,
+          child: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.all(8),
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: ElevatedButton(
+                  onPressed: () {
+                    showModalBottomSheet(
+                        context: context,
+                        builder: (context) => PlaceList(
+                              places: vm.places,
+                              onSelected: _openMapsFor,
+                            ));
+                  },
+                  child: Text("Show List"),
+                ),
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+            top: 150,
+            right: 20,
+            child: FloatingActionButton(
+              onPressed: () {
+                vm.toogleMapType();
+              },
+              child: Icon(Icons.map),
+            ))
       ],
     ));
   }

@@ -20,4 +20,8 @@ class PlaceVM {
   double get longitude {
     return _place.longitude;
   }
+
+  String get name {
+    return _place.name;
+  }
 }
