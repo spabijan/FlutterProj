@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:news_ap/pages/news_article_details_page.dart';
 import 'package:news_ap/view_models/news_article_list_vm.dart';
+import 'package:news_ap/view_models/news_article_vm.dart';
 import 'package:news_ap/widgets/news_list.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +15,14 @@ class NewsListPage extends StatefulWidget {
 class _NewsListPageState extends State<NewsListPage> {
   final _controller = TextEditingController();
 
+  void _showNewsArticleDetails(BuildContext context, NewsArticleVM article) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+      return NewsArticleDetailsPage(
+        article: article,
+      );
+    }));
+  }
+
   @override
   void initState() {
     super.initState();
@@ -20,7 +30,7 @@ class _NewsListPageState extends State<NewsListPage> {
         .populateTopHeadlines();
   }
 
-  Widget _buildList(NewsArticleListVM vm) {
+  Widget _buildList(BuildContext context, NewsArticleListVM vm) {
     switch (vm.loadingStatus) {
       case LoadingStatus.searching:
         return Align(
@@ -29,7 +39,11 @@ class _NewsListPageState extends State<NewsListPage> {
       case LoadingStatus.empty:
         return Align(child: Text('No results found'));
       case LoadingStatus.completed:
-        return Expanded(child: NewsList(articles: vm.articles));
+        return Expanded(
+            child: NewsList(
+                articles: vm.articles,
+                onSelected: (selected) =>
+                    _showNewsArticleDetails(context, selected)));
     }
   }
 
@@ -59,7 +73,7 @@ class _NewsListPageState extends State<NewsListPage> {
                   )),
             ),
           ),
-          _buildList(vm)
+          _buildList(context, vm)
         ],
       ),
       appBar: AppBar(
