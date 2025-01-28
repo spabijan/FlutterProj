@@ -62,6 +62,10 @@ class MyHomePage extends StatelessWidget {
               title: 'AutoDisposeFamilyProvider',
               child: AutoDisposeFamilyPage(),
             ),
+            CustomButton(
+              title: 'AutoDisposeFamilyTestProvider',
+              child: AutoDisposeFamilyPage(),
+            ),
           ],
         ),
       ),
