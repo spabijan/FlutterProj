@@ -1,9 +1,7 @@
+import 'package:async_notifier_provider_lewagon/async_activity/async_activity_page.dart';
+import 'package:async_notifier_provider_lewagon/timer/timer_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:notifier_provider_lewagon/pages/enum_activity/enum_activity_page.dart';
-import 'package:notifier_provider_lewagon/pages/enum_async_activity/enum_async_activity_page.dart';
-import 'package:notifier_provider_lewagon/pages/sealed_activity/sealed_activity_page.dart';
 
 import 'pages/counter/counter_page.dart';
 import 'widgets/custom_button.dart';
@@ -22,7 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'NotifierProvider',
+      title: 'AsyncNotifierProvider',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -40,7 +38,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('NotifierProvider'),
+        title: const Text('AsyncNotifierProvider'),
       ),
       body: Center(
         child: ListView(
@@ -52,21 +50,10 @@ class MyHomePage extends StatelessWidget {
               child: CounterPage(),
             ),
             CustomButton(
-              title: 'Enum Activity',
-              child: EnumActivityPage(),
+              title: 'Async Activity',
+              child: AsyncActivityPage(),
             ),
-            CustomButton(
-              title: 'Sealed Activity',
-              child: SealedActivityPage(),
-            ),
-            CustomButton(
-              title: 'Enum Async Activity',
-              child: EnumAsyncActivityPage(),
-            ),
-            CustomButton(
-              title: 'Sealed Async Activity',
-              child: EnumAsyncActivityPage(),
-            ),
+            CustomButton(title: 'Timer', child: TimerPage())
           ],
         ),
       ),
