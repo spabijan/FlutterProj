@@ -2,11 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_riverpod/config/router/router_provider.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+part 'main.g.dart';
+
+@riverpod
+SharedPreferences sharedPreferences(Ref ref) {
+  throw UnimplementedError();
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = await SharedPreferences.getInstance();
   usePathUrlStrategy();
   runApp(
-    const ProviderScope(
+    ProviderScope(
+      overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
       child: MyApp(),
     ),
   );

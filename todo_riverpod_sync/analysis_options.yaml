@@ -1,0 +1,14 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    avoid_print: false
+    prefer_const_constructors: true
+    sort_constructors_first: true
+
+analyzer:
+  plugins:
+    - custom_lint
+  exclude:
+    - '**/*.freezed.dart'
+    - '**/*.g.dart'

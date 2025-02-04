@@ -18,9 +18,8 @@ class FirstPage extends StatelessWidget {
             const Text('First Page'),
             const SizedBox(height: 10),
             FilledButton(
-              onPressed: () {
-                GoRouter.of(context).goNamed(RouteNames.firstDetails);
-              },
+              onPressed: () =>
+                  GoRouter.of(context).goNamed(RouteNames.firstDetails),
               child: const Text('View First Details'),
             ),
           ],
