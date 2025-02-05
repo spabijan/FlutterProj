@@ -65,7 +65,16 @@ class _ShowTodosState extends ConsumerState<ShowTodos> {
     final todoListState = ref.watch(todoListProvider);
 
     return todoListState.when(
+        skipError: true,
         data: (todos) {
+          if (todos.isEmpty) {
+            return const Center(
+              child: Text(
+                'Enter some todo...',
+                style: TextStyle(fontSize: 20),
+              ),
+            );
+          }
           final filteredTodos = _filterTodos(todos);
           _prevTodosWidget = ListView.separated(
               itemBuilder: (_, index) {
