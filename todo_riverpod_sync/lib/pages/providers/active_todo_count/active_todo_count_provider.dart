@@ -6,6 +6,9 @@ part 'active_todo_count_provider.g.dart';
 
 @riverpod
 int activeTodoCount(Ref ref) {
-  final todos = ref.watch(todoListProvider);
-  return todos.where((element) => !element.completed).toList().length;
+  final todoListState = ref.watch(todoListProvider);
+  return todoListState.todos
+      .where((element) => !element.completed)
+      .toList()
+      .length;
 }

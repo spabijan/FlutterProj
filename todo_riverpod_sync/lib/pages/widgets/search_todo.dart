@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todo_riverpod_sync/pages/providers/search_provider/search_provider.dart';
+import 'package:todo_riverpod_sync/pages/providers/todo_search/todo_search_provider.dart';
 import 'package:todo_riverpod_sync/utils/debounce.dart';
 
 class SearchTodo extends ConsumerStatefulWidget {

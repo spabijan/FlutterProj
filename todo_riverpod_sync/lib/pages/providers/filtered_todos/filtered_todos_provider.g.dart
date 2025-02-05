@@ -6,7 +6,7 @@ part of 'filtered_todos_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$filteredTodosHash() => r'3a44cff3324d41d980c2c2d88b46ef5499718d21';
+String _$filteredTodosHash() => r'b6f8bd9c71634cd9765cf9b8613b805956664e5d';
 
 /// See also [filteredTodos].
 @ProviderFor(filteredTodos)
