@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todo_riverpod_sync/pages/providers/filtered_todos/filtered_todos_provider.dart';
+import 'package:todo_riverpod_sync/models/todo_model.dart';
+import 'package:todo_riverpod_sync/pages/providers/todo_filter/todo_filter_provider.dart';
 import 'package:todo_riverpod_sync/pages/providers/todo_list/todo_list_provider.dart';
 import 'package:todo_riverpod_sync/pages/providers/todo_list/todo_list_state.dart';
+import 'package:todo_riverpod_sync/pages/providers/todo_search/todo_search_provider.dart';
 import 'package:todo_riverpod_sync/pages/providers/todo_tem/todo_item.dart';
 import 'package:todo_riverpod_sync/pages/widgets/todo_item.dart';
 
@@ -15,6 +17,28 @@ class ShowTodos extends ConsumerStatefulWidget {
 
 class _ShowTodosState extends ConsumerState<ShowTodos> {
   Widget _prevTodosWidget = const SizedBox.shrink();
+
+  List<Todo> _filterTodos(List<Todo> allTodos) {
+    final filter = ref.watch(todoFilterProvider);
+    final search = ref.watch(todoSearchProvider);
+
+    List<Todo> tempTodos;
+
+    tempTodos = switch (filter) {
+      Filter.active => allTodos.where((todo) => !todo.completed).toList(),
+      Filter.completed => allTodos.where((todo) => todo.completed).toList(),
+      Filter.all => allTodos,
+    };
+
+    if (search.isNotEmpty) {
+      tempTodos = tempTodos
+          .where(
+              (todo) => todo.desc.toLowerCase().contains(search.toLowerCase()))
+          .toList();
+    }
+
+    return tempTodos;
+  }
 
   @override
   void initState() {
@@ -29,33 +53,40 @@ class _ShowTodosState extends ConsumerState<ShowTodos> {
   @override
   Widget build(BuildContext context) {
     ref.listen(todoListProvider, (previous, next) {
-      if (next.status == TodoListStatus.failure) {
-        showDialog(
-          context: context,
-          builder: (context) => const AlertDialog(
-            title: Text(
-              'Error',
-              textAlign: TextAlign.center,
+      switch (next) {
+        case TodoListStateFailure(error: String error):
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text(
+                'Error',
+                textAlign: TextAlign.center,
+              ),
+              content: Text(
+                error,
+                textAlign: TextAlign.center,
+              ),
             ),
-          ),
-        );
+          );
+        case _:
+          break;
       }
     });
     final todoListState = ref.watch(todoListProvider);
-    final filteredTodos = ref.watch(filteredTodosProvider);
 
-    switch (todoListState.status) {
-      case TodoListStatus.initial:
+    switch (todoListState) {
+      case TodoListStateIntial():
         return const SizedBox.shrink();
-      case TodoListStatus.loading:
+      case TodoListStateLoading():
         return const Center(child: CircularProgressIndicator());
-      case TodoListStatus.failure when _prevTodosWidget is SizedBox:
+      case TodoListStateFailure(error: var error)
+          when _prevTodosWidget is SizedBox:
         return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                todoListState.error,
+                error,
                 style: const TextStyle(fontSize: 20),
               ),
               const SizedBox(
@@ -72,15 +103,19 @@ class _ShowTodosState extends ConsumerState<ShowTodos> {
             ],
           ),
         );
-      case TodoListStatus.failure:
-      case TodoListStatus.success:
+      case TodoListStateFailure(error: _):
+        return _prevTodosWidget;
+      case TodoListStateSuccess(todos: List<Todo> todos):
+        final filteredTodos = _filterTodos(todos);
         _prevTodosWidget = ListView.separated(
-            itemBuilder: (_, index) => ProviderScope(
-                  overrides: [
-                    todoItemProvider.overrideWithValue(filteredTodos[index])
-                  ],
-                  child: const TodoItem(),
-                ),
+            itemBuilder: (_, index) {
+              return ProviderScope(
+                overrides: [
+                  todoItemProvider.overrideWithValue(filteredTodos[index])
+                ],
+                child: const TodoItem(),
+              );
+            },
             separatorBuilder: (_, __) => const Divider(
                   color: Colors.grey,
                 ),

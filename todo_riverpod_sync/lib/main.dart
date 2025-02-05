@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_riverpod_sync/pages/providers/theme/theme_provider.dart';
+import 'package:todo_riverpod_sync/pages/providers/theme/theme_state.dart';
 import 'package:todo_riverpod_sync/repositories/fake_todos_repository.dart';
 import 'package:todo_riverpod_sync/repositories/providers/todos_repository_provider.dart';
 
@@ -27,8 +28,8 @@ class MyApp extends ConsumerWidget {
       title: 'Todos',
       debugShowCheckedModeBanner: false,
       theme: switch (theme) {
-        AppTheme.light => ThemeData.light(useMaterial3: true),
-        AppTheme.dark => ThemeData.dark(useMaterial3: true),
+        LightTheme() => ThemeData.light(useMaterial3: true),
+        DarkTheme() => ThemeData.dark(useMaterial3: true),
       },
       home: const TodosPage(),
     );

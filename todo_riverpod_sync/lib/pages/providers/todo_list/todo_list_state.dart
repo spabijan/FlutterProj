@@ -1,18 +1,38 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:todo_riverpod_sync/models/todo_model.dart';
 
-part 'todo_list_state.freezed.dart';
+sealed class TodoListState {
+  const TodoListState();
+}
 
-enum TodoListStatus { initial, loading, success, failure }
+final class TodoListStateIntial extends TodoListState {
+  const TodoListStateIntial();
 
-@freezed
-class TodoListState with _$TodoListState {
-  const factory TodoListState(
-      {required TodoListStatus status,
-      required List<Todo> todos,
-      @Default('') String error}) = _TodoListState;
+  @override
+  String toString() => 'TodoListStateIntial';
+}
 
-  factory TodoListState.initial() {
-    return const TodoListState(status: TodoListStatus.initial, todos: []);
-  }
+final class TodoListStateLoading extends TodoListState {
+  const TodoListStateLoading();
+
+  @override
+  String toString() => 'TodoListStateLoading';
+}
+
+final class TodoListStateFailure extends TodoListState {
+  TodoListStateFailure({required this.error});
+
+  final String error;
+
+  @override
+  String toString() => 'TodoListStateError($error)';
+}
+
+final class TodoListStateSuccess extends TodoListState {
+  const TodoListStateSuccess({required this.todos});
+
+  final List<Todo> todos;
+
+  @override
+  String toString() => 'TodoListStateSuccess(todos $todos)';
 }

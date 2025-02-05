@@ -20,11 +20,11 @@ class _NewTodoState extends ConsumerState<NewTodo> {
     super.dispose();
   }
 
-  bool shouldEnable(TodoListStatus status) {
-    switch (status) {
-      case TodoListStatus.initial:
-      case TodoListStatus.loading:
-      case TodoListStatus.failure when _prevWidget is SizedBox:
+  bool shouldEnable(TodoListState state) {
+    switch (state) {
+      case TodoListStateIntial():
+      case TodoListStateLoading():
+      case TodoListStateFailure(error: _) when _prevWidget is SizedBox:
         return false;
       case _:
         _prevWidget = Container();
@@ -37,7 +37,7 @@ class _NewTodoState extends ConsumerState<NewTodo> {
     final todoListState = ref.watch(todoListProvider);
 
     return TextField(
-      enabled: shouldEnable(todoListState.status),
+      enabled: shouldEnable(todoListState),
       controller: newTodoController,
       decoration: const InputDecoration(labelText: 'What to do?'),
       onSubmitted: (String? value) {
