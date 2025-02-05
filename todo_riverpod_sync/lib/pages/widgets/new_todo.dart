@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_riverpod_sync/pages/providers/todo_list/todo_list_provider.dart';
-import 'package:todo_riverpod_sync/pages/providers/todo_list/todo_list_state.dart';
 
 class NewTodo extends ConsumerStatefulWidget {
   const NewTodo({super.key});
@@ -20,16 +19,15 @@ class _NewTodoState extends ConsumerState<NewTodo> {
     super.dispose();
   }
 
-  bool shouldEnable(TodoListState state) {
-    switch (state) {
-      case TodoListStateIntial():
-      case TodoListStateLoading():
-      case TodoListStateFailure(error: _) when _prevWidget is SizedBox:
-        return false;
-      case _:
+  bool shouldEnable(AsyncValue state) {
+    return state.when(
+      data: (data) {
         _prevWidget = Container();
         return true;
-    }
+      },
+      error: (error, stackTrace) => _prevWidget is SizedBox ? false : true,
+      loading: () => false,
+    );
   }
 
   @override
