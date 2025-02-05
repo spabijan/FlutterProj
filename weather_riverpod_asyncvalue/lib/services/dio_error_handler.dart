@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 final class DioErrorHandler {
   DioErrorHandler._();
 
-  String dioErrorHandler(Response response) {
+  static String dioErrorHandler(Response response) {
     final statusCode = response.statusCode;
     final statusMessage = response.statusMessage;
 
