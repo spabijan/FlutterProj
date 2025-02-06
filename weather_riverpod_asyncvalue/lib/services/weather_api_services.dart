@@ -11,6 +11,28 @@ class WeatherApiServices {
 
   WeatherApiServices({required this.dio});
 
+  Future<String> getReverseGeocoding(
+      {required double lat, required double lon}) async {
+    try {
+      final Response response = await dio.get('/geo/1.0/reverse',
+          queryParameters: {
+            'lat': lat,
+            'lon': lon,
+            'limit': Constants.kLimit,
+            'appid': dotenv.env['APPID']
+          });
+      final List result = response.data;
+
+      if (result.isEmpty) {
+        throw WeatherException('Cannot get name of the location ($lat, $lon)');
+      }
+
+      return result[0]['name'];
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<DirectGeocoding> getDirectGeocoding(String city) async {
     try {
       final Response response = await dio.get('/geo/1.0/direct',

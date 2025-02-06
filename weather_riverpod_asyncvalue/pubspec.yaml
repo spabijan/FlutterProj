@@ -16,6 +16,7 @@ dependencies:
   flutter_dotenv: ^5.1.0
   flutter_riverpod: ^2.4.6
   freezed_annotation: ^2.4.1
+  geolocator: ^13.0.2
   json_annotation: ^4.8.1
   recase: ^4.1.0
   riverpod_annotation: ^2.3.1
@@ -27,7 +28,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   freezed: ^2.5.8
-  json_serializable: ^6.9.3 
+  json_serializable: ^6.9.3
   riverpod_generator: ^2.6.4
   riverpod_lint: ^2.6.4
 
