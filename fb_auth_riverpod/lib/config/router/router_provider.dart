@@ -1,6 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import 'package:fb_auth_riverpod/config/router/route_names.dart';
 import 'package:fb_auth_riverpod/pages/auth/reset_password/reset_password_page.dart';
-import 'package:fb_auth_riverpod/pages/auth/signin/signin_page.dart';
 import 'package:fb_auth_riverpod/pages/auth/signup/signup_page.dart';
 import 'package:fb_auth_riverpod/pages/auth/verify_email/verify_email_page.dart';
 import 'package:fb_auth_riverpod/pages/content/change_password/change_password_page.dart';
@@ -8,16 +12,44 @@ import 'package:fb_auth_riverpod/pages/content/home/home_page.dart';
 import 'package:fb_auth_riverpod/pages/page_not_found.dart';
 import 'package:fb_auth_riverpod/pages/splash/firebase_error_page.dart';
 import 'package:fb_auth_riverpod/pages/splash/splash_page.dart';
-import 'package:go_router/go_router.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fb_auth_riverpod/repositories/auth_repository_provider.dart';
 
 part 'router_provider.g.dart';
 
 @riverpod
 GoRouter router(Ref ref) {
+  final authState = ref.watch(authStateStreamProvider);
   return GoRouter(
-      initialLocation: '/splash',
+      initialLocation: '/${RouteNames.splash}',
+      redirect: (context, state) {
+        if (authState is AsyncLoading<User?>) {
+          return '/${RouteNames.splash}';
+        }
+        if (authState is AsyncError<User?>) {
+          return '/${RouteNames.firebaseError}';
+        }
+
+        final isAuthenticated = authState.valueOrNull != null;
+        final isInAuthenticationRoute =
+            (state.matchedLocation == '/${RouteNames.signin}') ||
+                (state.matchedLocation == '/${RouteNames.resetPassword}') ||
+                (state.matchedLocation == '/${RouteNames.signup}');
+
+        if (!isAuthenticated) {
+          return isInAuthenticationRoute ? null : '/${RouteNames.signin}';
+        }
+        // if (!FirebaseConstants.fbAuth.currentUser!.emailVerified) {
+        //   return '/${RouteNames.verifyEmail}';
+        // }
+
+        final isVerifyingEmail =
+            state.matchedLocation == '/${RouteNames.verifyEmail}';
+        final isSplashing = state.matchedLocation == '/${RouteNames.splash}';
+
+        return (isInAuthenticationRoute || isVerifyingEmail || isSplashing)
+            ? '/${RouteNames.home}'
+            : null;
+      },
       routes: [
         GoRoute(
           path: '/${RouteNames.splash}',
@@ -32,7 +64,7 @@ GoRouter router(Ref ref) {
         GoRoute(
           path: '/${RouteNames.signin}',
           name: RouteNames.signin,
-          builder: (_, __) => const SigninPage(),
+          builder: (_, __) => const SignupPage(),
         ),
         GoRoute(
           path: '/${RouteNames.signup}',
