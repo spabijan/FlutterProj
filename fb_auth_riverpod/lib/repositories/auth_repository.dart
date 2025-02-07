@@ -13,11 +13,11 @@ class AuthRepository {
       final userCredential = await FirebaseConstants.fbAuth
           .createUserWithEmailAndPassword(email: email, password: password);
       final signedInUser = userCredential.user!;
-      await FirebaseConstants.userCollections
+      await FirebaseConstants.userCollection
           .doc(signedInUser.uid)
           .set({'name': name, 'email': email});
     } catch (e) {
-      FirebaseAuthExceptionHandler.handleException(e);
+      throw FirebaseAuthExceptionHandler.handleException(e);
     }
   }
 
@@ -26,7 +26,7 @@ class AuthRepository {
       await FirebaseConstants.fbAuth
           .signInWithEmailAndPassword(email: email, password: password);
     } catch (e) {
-      FirebaseAuthExceptionHandler.handleException(e);
+      throw FirebaseAuthExceptionHandler.handleException(e);
     }
   }
 
@@ -42,7 +42,7 @@ class AuthRepository {
     try {
       await currentUser!.updatePassword(password);
     } catch (e) {
-      FirebaseAuthExceptionHandler.handleException(e);
+      throw FirebaseAuthExceptionHandler.handleException(e);
     }
   }
 
@@ -50,7 +50,7 @@ class AuthRepository {
     try {
       await FirebaseConstants.fbAuth.sendPasswordResetEmail(email: email);
     } catch (e) {
-      FirebaseAuthExceptionHandler.handleException(e);
+      throw FirebaseAuthExceptionHandler.handleException(e);
     }
   }
 
@@ -58,7 +58,7 @@ class AuthRepository {
     try {
       await currentUser!.sendEmailVerification();
     } catch (e) {
-      FirebaseAuthExceptionHandler.handleException(e);
+      throw FirebaseAuthExceptionHandler.handleException(e);
     }
   }
 
@@ -66,17 +66,17 @@ class AuthRepository {
     try {
       await currentUser!.reload();
     } catch (e) {
-      FirebaseAuthExceptionHandler.handleException(e);
+      throw FirebaseAuthExceptionHandler.handleException(e);
     }
   }
 
   Future<void> reauthenticateWithCredential(
-      String email, String password) async {
+      {required String email, required String password}) async {
     try {
       await currentUser!.reauthenticateWithCredential(
           EmailAuthProvider.credential(email: email, password: password));
     } catch (e) {
-      FirebaseAuthExceptionHandler.handleException(e);
+      throw FirebaseAuthExceptionHandler.handleException(e);
     }
   }
 }

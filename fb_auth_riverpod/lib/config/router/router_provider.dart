@@ -1,3 +1,5 @@
+import 'package:fb_auth_riverpod/constants/firebase_constants.dart';
+import 'package:fb_auth_riverpod/pages/auth/signin/signin_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -38,9 +40,9 @@ GoRouter router(Ref ref) {
         if (!isAuthenticated) {
           return isInAuthenticationRoute ? null : '/${RouteNames.signin}';
         }
-        // if (!FirebaseConstants.fbAuth.currentUser!.emailVerified) {
-        //   return '/${RouteNames.verifyEmail}';
-        // }
+        if (!FirebaseConstants.fbAuth.currentUser!.emailVerified) {
+          return '/${RouteNames.verifyEmail}';
+        }
 
         final isVerifyingEmail =
             state.matchedLocation == '/${RouteNames.verifyEmail}';
@@ -64,7 +66,7 @@ GoRouter router(Ref ref) {
         GoRoute(
           path: '/${RouteNames.signin}',
           name: RouteNames.signin,
-          builder: (_, __) => const SignupPage(),
+          builder: (_, __) => const SigninPage(),
         ),
         GoRoute(
           path: '/${RouteNames.signup}',
