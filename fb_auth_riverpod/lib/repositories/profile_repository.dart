@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fb_auth_riverpod/constants/firebase_constants.dart';
 import 'package:fb_auth_riverpod/models/app_user.dart';
-import 'package:fb_auth_riverpod/models/custom_error.dart';
 import 'package:fb_auth_riverpod/repositories/handle_exception.dart';
-import 'package:flutter/rendering.dart';
 
 class ProfileRepository {
   Future<AppUser> getProfile({required String uid}) async {

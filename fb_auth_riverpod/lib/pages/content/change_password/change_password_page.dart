@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fb_auth_riverpod/pages/content/reauthenticate/reauthenticate_page.dart';
 import 'package:fb_auth_riverpod/pages/widgets/form_field.dart';
 import 'package:flutter/material.dart';
