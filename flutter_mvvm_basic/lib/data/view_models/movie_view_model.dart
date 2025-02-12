@@ -6,7 +6,7 @@ class MovieViewModel {
 
   final Movie _movie;
 
-  String get id => _movie.id.toString();
+  int get id => _movie.id;
   String get imageUrl => ApiConstants.imageBaseUrl + _movie.backdrop_path;
   String get title => _movie.title;
   String get rating => '${_movie.vote_average}/10';

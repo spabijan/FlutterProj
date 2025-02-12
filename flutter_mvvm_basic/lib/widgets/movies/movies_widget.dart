@@ -91,7 +91,7 @@ class MoviesWidget extends StatelessWidget {
                           Text(_movie.releaseDate,
                               style: TextStyle(color: Colors.grey)),
                           Spacer(),
-                          FavouriteButtonWidget()
+                          FavouriteButtonWidget(movieViewModel: _movie)
                         ],
                       )
                     ],

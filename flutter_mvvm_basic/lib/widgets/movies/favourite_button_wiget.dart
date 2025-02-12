@@ -1,17 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mvvm_basic/data/view_models/movie_view_model.dart';
 
-class FavouriteButtonWidget extends StatelessWidget {
-  const FavouriteButtonWidget({super.key});
+class FavouriteButtonWidget extends StatefulWidget {
+  const FavouriteButtonWidget({super.key, required movieViewModel})
+      : _movieViewModel = movieViewModel;
+  final MovieViewModel _movieViewModel;
+
+  @override
+  State<FavouriteButtonWidget> createState() => _FavouriteButtonWidgetState();
+}
+
+class _FavouriteButtonWidgetState extends State<FavouriteButtonWidget> {
+  final List<int> favouriteMovieIds = [];
+
+  void _toogleFavourite(bool isFavourite) {
+    setState(
+      isFavourite
+          ? () => favouriteMovieIds.remove(widget._movieViewModel.id)
+          : () => favouriteMovieIds.add(widget._movieViewModel.id),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    bool isFavourite = favouriteMovieIds.contains(widget._movieViewModel.id);
+
     return IconButton(
-        onPressed: () {
-          // TODO: implement add to favourites
-        },
+        onPressed: () => _toogleFavourite(isFavourite),
         icon: Icon(
-          Icons.favorite_outline_rounded,
-          //color: Colors.red,
+          isFavourite ? Icons.favorite_rounded : Icons.favorite_outline_rounded,
           size: 20,
         ));
   }
