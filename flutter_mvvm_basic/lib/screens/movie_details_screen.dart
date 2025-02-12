@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mvvm_basic/constants/my_app_urls.dart';
+import 'package:flutter_mvvm_basic/data/view_models/movie_view_model.dart';
 import 'package:flutter_mvvm_basic/widgets/cached_image.dart';
 import 'package:flutter_mvvm_basic/widgets/movies/favourite_button_wiget.dart';
 import 'package:flutter_mvvm_basic/widgets/movies/genres_list_widget.dart';
 
 class MovieDetailsScreen extends StatelessWidget {
-  const MovieDetailsScreen({super.key});
+  const MovieDetailsScreen({super.key, required movie}) : _movie = movie;
+  final MovieViewModel _movie;
 
   @override
   Widget build(BuildContext context) {
@@ -13,12 +14,15 @@ class MovieDetailsScreen extends StatelessWidget {
       body: SafeArea(
           child: Stack(
         children: [
-          SizedBox(
-              height: MediaQuery.of(context).size.height * 0.45,
-              width: double.infinity,
-              child: CachedImage(
-                imageUrl: MyAppUrls.fightClubImage,
-              )),
+          Hero(
+            tag: _movie.id,
+            child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.45,
+                width: double.infinity,
+                child: CachedImage(
+                  imageUrl: _movie.imageUrl,
+                )),
+          ),
           SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,7 +43,7 @@ class MovieDetailsScreen extends StatelessWidget {
                                 height: 25,
                               ),
                               Text(
-                                'Movie Title',
+                                _movie.title,
                                 maxLines: 2,
                                 style: TextStyle(
                                     fontSize: 28.0,
@@ -59,10 +63,10 @@ class MovieDetailsScreen extends StatelessWidget {
                                   SizedBox(
                                     width: 5,
                                   ),
-                                  Text('9/10'),
+                                  Text(_movie.rating),
                                   Spacer(),
                                   Text(
-                                    'Release Date',
+                                    _movie.releaseDate,
                                     style: TextStyle(color: Colors.grey),
                                   )
                                 ],
@@ -70,12 +74,14 @@ class MovieDetailsScreen extends StatelessWidget {
                               const SizedBox(
                                 height: 10,
                               ),
-                              GenresListWidget(),
+                              GenresListWidget(
+                                movie: _movie,
+                              ),
                               SizedBox(
                                 height: 15,
                               ),
                               Text(
-                                'overview ' * 200,
+                                _movie.overview,
                                 textAlign: TextAlign.justify,
                                 style: TextStyle(fontSize: 18),
                               )

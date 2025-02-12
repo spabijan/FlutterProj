@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mvvm_basic/data/view_models/movie_view_model.dart';
 import 'package:flutter_mvvm_basic/widgets/movies/movies_widget.dart';
 
 class FavouriteScreen extends StatelessWidget {
-  const FavouriteScreen({super.key});
+  FavouriteScreen({super.key});
+
+  final List<MovieViewModel> _movies = [];
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +18,8 @@ class FavouriteScreen extends StatelessWidget {
           )
         ]),
         body: ListView.builder(
-          itemCount: 10,
-          itemBuilder: (context, index) => MoviesWidget(),
+          itemCount: _movies.length,
+          itemBuilder: (context, index) => MoviesWidget(movie: _movies[index]),
         ));
   }
 }

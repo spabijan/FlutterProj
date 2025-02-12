@@ -6,7 +6,7 @@ import 'package:flutter_mvvm_basic/model/movie.dart';
 import 'package:flutter_mvvm_basic/services/api_services_protocol.dart';
 import 'package:http/http.dart' as http;
 
-class ApiServices implements ApiServicesProtocol {
+class MoviesApiServices implements ApiServicesProtocol {
   @override
   Future<List<Movie>> fetchMovies({int page = 1}) async => await _fetchMovies();
 
