@@ -13,13 +13,11 @@ class FavouriteButtonWidget extends StatefulWidget {
 class _FavouriteButtonWidgetState extends State<FavouriteButtonWidget> {
   final List<int> favouriteMovieIds = [];
 
-  void _toogleFavourite(bool isFavourite) {
-    setState(
+  void _toogleFavourite(bool isFavourite) => setState(
       isFavourite
           ? () => favouriteMovieIds.remove(widget._movieViewModel.id)
           : () => favouriteMovieIds.add(widget._movieViewModel.id),
     );
-  }
 
   @override
   Widget build(BuildContext context) {
